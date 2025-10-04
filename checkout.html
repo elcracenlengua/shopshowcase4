@@ -616,8 +616,6 @@
             document.getElementById('loading').style.display = 'block';
 
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 3000));
 
                 // Save order to localStorage (in real app, this would be sent to server)
                 const orders = JSON.parse(localStorage.getItem('orders')) || [];
@@ -662,7 +660,9 @@
                 if (cart.length === 0) return;
                 const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 // Send data to bot
-                tg.sendData(JSON.stringify(orderData));
+                if (window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.sendData === 'function') {
+                    window.Telegram.WebApp.sendData(JSON.stringify(orderData));
+                }
                 // Clear cart
                 cart = [];
             } catch (error) {
