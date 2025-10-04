@@ -651,7 +651,7 @@
                 document.getElementById('loading').style.display = 'none';
             }
         }
-
+        
         async function notifyOwner(orderData) {
             // In a real implementation, this would send a request to your backend
             // which would then notify the bot owner via Telegram
@@ -659,12 +659,12 @@
             
             // Simulate API call to notify owner
             try {
-                // This would be your actual API endpoint
-                // await fetch('/api/notify-owner', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify(orderData)
-                // });
+                if (cart.length === 0) return;
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                // Send data to bot
+                tg.sendData(JSON.stringify(orderData));
+                // Clear cart
+                cart = [];
             } catch (error) {
                 console.error('Failed to notify owner:', error);
             }
